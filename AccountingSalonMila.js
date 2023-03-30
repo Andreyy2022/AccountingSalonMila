@@ -1,0 +1,116 @@
+'use strict'
+
+let service = document.querySelector('#service');
+let cash = document.querySelector('#cash');
+let card = document.querySelector('#card');
+let costs = document.querySelector('#costs');
+let button = document.querySelector('#button');
+let table = document.querySelector('#table');
+let ARR = [];
+
+button.addEventListener('click', function() {
+	
+	if(service.value !== '' || cash.value !== '' || card.value !== '' || costs.value !== '') {
+
+		let date = new Date();
+
+		let obj = {
+			service_: '',
+			cash_: '',
+			card_: '',
+			costs_: '',
+			date_: date.toLocaleDateString(),
+			sumDay: '',
+			sumMonth_: '',
+		}
+
+		obj.service_ = service.value;
+		obj.cash_ = cash.value;
+		obj.card_ = card.value;
+		obj.costs_ = costs.value;
+
+		if (localStorage.getItem('firstData') !== null) {
+			ARR = JSON.parse(localStorage.getItem('firstData'));
+		}
+
+		ARR.push(obj);
+		let json = JSON.stringify(ARR);
+		localStorage.setItem('firstData', json);
+	}
+});
+
+let newARR = JSON.parse(localStorage.getItem('firstData'));
+
+if (newARR !== null) {
+	
+	for (let elem of newARR) {
+		let TR = document.createElement('tr');
+		table.appendChild(TR);
+	
+		for (let key in elem) {
+			let TD = document.createElement('td');
+			TD.innerHTML = elem[key];
+			TR.appendChild(TD);
+		}
+	}	
+
+}
+
+let rows = table.rows;
+let lastIndexToSum = [];
+let index = [];
+let sum = 0;
+let k = 1;
+
+for (let i = 1; i < rows.length; i++) {
+    if (rows[i].cells[4].innerHTML !== rows[i-1].cells[4].innerHTML) {
+
+		for (let j = 1; j < i; j++) {
+			index.push(j);
+		}
+
+		if (index[index.length-1] === undefined) {
+			continue;
+		} else {
+		lastIndexToSum.push(index[index.length-1]);
+		}
+
+		for (k; k <= index[index.length-1]; k++) {
+			sum += +rows[k].cells[1].innerHTML + +rows[k].cells[2].innerHTML;
+		}	
+
+		rows[lastIndexToSum[lastIndexToSum.length-1]].cells[5].innerHTML = sum;
+		sum = 0;
+	}	
+}
+		
+lastIndexToSum = [];
+index = [];
+sum = 0;
+k = 1;
+
+for (let i = 1; i < rows.length; i++) {
+
+	if (rows[i].cells[4].innerHTML[4] !== rows[i-1].cells[4].innerHTML[4]) {
+
+		for (let j = 1; j < i; j++) {
+			index.push(j);
+		}
+
+		if (index[index.length-1] === undefined) {
+			continue;
+		} else {
+			lastIndexToSum.push(index[index.length-1]);
+		}
+
+		for (k; k <= index[index.length-1]; k++) {
+			sum += +rows[k].cells[5].innerHTML - +rows[k].cells[3].innerHTML;
+		}	
+
+		rows[lastIndexToSum[lastIndexToSum.length-1]].cells[6].innerHTML = sum;
+		sum = 0;
+	}
+}
+
+
+//localStorage.clear();

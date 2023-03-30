@@ -1,0 +1,21 @@
+body {
+    background-size: cover;
+    background-image: url(1645934180_15-kartinkin-net-p-kartinki-oblakov-35.jpg);
+}
+
+th, td {
+    border: 1px solid black;
+    width: 168px;
+    text-align: center;
+    color: purple;
+}
+
+table {
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+input {
+    text-align: center;
+}
+
